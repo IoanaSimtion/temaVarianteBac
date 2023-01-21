@@ -1,5 +1,6 @@
 ﻿using namespace std;
 #include <iostream>
+#include <fstream>
 #pragma once
 
 //S2:
@@ -171,4 +172,69 @@ Proiectați un algoritm eficient din punctul de vedere al timpului de executare.
 Exemplu: dacă fișierul bac.in conține numerele 12 235 123 67 98 6 96 94 123 67 98 100
 se afișează pe ecran, în această ordine, numerele 97 95.*/
 
+void citireVector(int v[], int& d) {
+	d = 0;
+	ifstream f("numere.txt");
+	while (!f.eof()) {
+		f >> v[d];
+		d++;
+	}
+}
 
+void sort(int v[], int d) {
+	bool flag = 0;
+	do {
+		flag = 1;
+		for (int i = 0; i < d - 1; i++) {
+			if (v[i] > v[i + 1]) {
+				int aux = v[i];
+				v[i] = v[i + 1];
+				v[i + 1] = aux;
+				flag = 0;
+			}
+		}
+	} while (flag == 0);
+}
+
+bool cautareBinara(int v[], int d, int numar) {
+	int st = 0, dr = d - 1;
+	while (st <= dr) {
+		int mij = (st + dr) / 2;
+		if (numar == v[mij]) {
+			return true;
+		}
+		else {
+			if (numar > v[mij]) {
+				st = mij + 1;
+			}
+			else {
+				dr = mij - 1;
+			}
+		}
+
+	}
+	return false;
+}
+
+void afisareNumere(int v[], int d) {
+	int afisare = 0;
+	for (int i = 99; i > 9 && afisare < 2; i--) {
+		if (cautareBinara(v, d, i) == 0) {
+			cout << i << ' ';
+			afisare++;
+		}
+	}
+	if (afisare < 2) {
+		cout << "Nu exista";
+	}
+}
+
+void solutie3() {
+	int v[100], d;
+	citireVector(v, d);
+	sort(v, d);
+	/*for (int i = 0; i < d; i++) {
+		cout << v[i] << ' ';
+	}*/
+	afisareNumere(v, d);	
+}
